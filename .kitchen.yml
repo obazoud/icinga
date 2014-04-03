@@ -8,9 +8,8 @@ provisioner:
 platforms:
 - name: wheezy-64
   driver_config:
-    box: wheezy64
-    box_url: http://debbuild.bigpoint.net/wheezy64.box
-    # box_url: http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_debian-7.4_chef-provisionerless.box
+    box: icinga-opscode-debian-7.4
+    box_url: http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_debian-7.4_chef-provisionerless.box
     network:
     - ["forwarded_port", {guest: 80, host: 8080, auto_correct: true}]
     - ["forwarded_port", {guest: 8080, host: 8081, auto_correct: true}]
@@ -24,6 +23,7 @@ suites:
   - name: icinga-client
     data_bags_path: "test/integration/default/data_bags"
     run_list:
+      - recipe[apt]
       - role[monitoring-client]
     attributes:
       set_fqdn: "icinga-client-01.local"
@@ -31,6 +31,7 @@ suites:
     data_bags_path: "test/integration/default/data_bags"
     #encrypted_data_bag_secret_key_path: "test/integration/default/encrypted_data_bag_secret"
     run_list:
+      - recipe[apt]
       - role[monitoring-server]
       - recipe[exim4-light]
     attributes:
